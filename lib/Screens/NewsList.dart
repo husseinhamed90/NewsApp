@@ -69,12 +69,12 @@ class _NewsListState extends State<NewsList> {
                           child: Container(
                               padding: EdgeInsets.only(left: 10,right: 10),
                               decoration: BoxDecoration(
-                                color: (appCubit.selectedCategoryIndex!=index)?Colors.white:Colors.black,
-                                border: Border.all(color: Colors.blueAccent,width: 0.5),
+                                color: (appCubit.selectedCategoryIndex!=index)?Colors.white:Color(0xff23b845),
+                               // border: Border.all(color: Colors.grey,width: 0.5),
                                   borderRadius: BorderRadius.all(Radius.circular(10)),
                               ),
                               alignment: Alignment.center,child: Text(AppCubit.get(context).categories[index],style: TextStyle(
-                              color: (appCubit.selectedCategoryIndex!=index)?Colors.black:Colors.red,fontSize: 16
+                              color: (appCubit.selectedCategoryIndex!=index)?Colors.black:Colors.white,fontSize: 16
                           ),)));
                     },
                     separatorBuilder: (context, index) {
