@@ -6,6 +6,7 @@ import 'package:loginpagechallenge/Models/NewsAPI.dart';
 import 'package:loginpagechallenge/Models/UserAccount.dart';
 import 'package:loginpagechallenge/Network/Remote/DioHelper.dart';
 import 'package:loginpagechallenge/Network/Remote/FireBaseAPIs.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AppCubit extends Cubit<CubitState>{
 
@@ -63,6 +64,12 @@ class AppCubit extends Cubit<CubitState>{
       }
     }
   }
+
+
+  void removeNewFromList(int index){
+    newsApi.articles!.removeAt(index);
+    emit(articleremoved());
+  }
   List<String>categories =["business" ,"entertainment" ,"general", "health" ,"science" ,"sports" ,"technology"];
   double numberOfPages=0;
   //String selectedCategory="sports";
@@ -79,8 +86,8 @@ class AppCubit extends Cubit<CubitState>{
   Future<void> changeCurrentCategory(int index)async{
     selectedCategoryIndex=index;
     count=1;
-    loadData();
     emit(PositionChanged());
+    loadData();
   }
 
   void increasePageNumber(){

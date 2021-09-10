@@ -73,3 +73,5 @@ class CheckForValidDataAndValidNumber extends CubitState{}
 class InvalidNumber extends CubitState {}
 
 class CounterIncreased extends CubitState{}
+
+class articleremoved extends CubitState{}

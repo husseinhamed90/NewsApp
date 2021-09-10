@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loginpagechallenge/Cubits/AppCubit/AppCubit.dart';
 import 'package:loginpagechallenge/Models/NewsAPI.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -54,20 +55,24 @@ Row buildLowerCategories(String text,String imageUrl) {
 }
 
 
-ListView buildListViewOfNews(NewsApi newsApi) {
-
+ListView buildListViewOfNews(NewsApi newsApi,AppCubit appCubit) {
 
   return ListView.separated(
     separatorBuilder: (context, index) => Divider(color: Color(0xffF2F2F2),height: 1.5,),
-    itemBuilder:(context, index) => buildNewItem(newsApi.articles![index]),
+    itemBuilder:(context, index) => buildNewItem(newsApi.articles![index],appCubit,index),
     itemCount: newsApi.articles!.length,);
 }
 
-InkWell buildNewItem(Article article) {
+InkWell buildNewItem(Article article,AppCubit appCubit,int index)  {
+
   return InkWell(
 
     onTap: (){
-      launch("${article.url}");
+      try{
+        launch("${article.url}");
+      }
+      catch(e){
+      }
     },
     child: Container(
           height: 150,
@@ -78,6 +83,7 @@ InkWell buildNewItem(Article article) {
             children: [
               Container(
                 height: 100,
+                width: 100,
                 child: Column(
                   children: [
                     ClipRRect(
@@ -86,7 +92,7 @@ InkWell buildNewItem(Article article) {
                         "${article.urlToImage}",
                         width: 100.0,
                         height: 100.0,
-                        fit: BoxFit.cover,
+                        fit: BoxFit.cover
                       ),
                     ),
                   ],

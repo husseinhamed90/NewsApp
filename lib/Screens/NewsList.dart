@@ -70,8 +70,7 @@ class _NewsListState extends State<NewsList> {
                               padding: EdgeInsets.only(left: 10,right: 10),
                               decoration: BoxDecoration(
                                 color: (appCubit.selectedCategoryIndex!=index)?Colors.white:Color(0xff23b845),
-                               // border: Border.all(color: Colors.grey,width: 0.5),
-                                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                                  borderRadius: BorderRadius.all(Radius.circular(50)),
                               ),
                               alignment: Alignment.center,child: Text(AppCubit.get(context).categories[index],style: TextStyle(
                               color: (appCubit.selectedCategoryIndex!=index)?Colors.black:Colors.white,fontSize: 16
@@ -87,7 +86,7 @@ class _NewsListState extends State<NewsList> {
                   ),
                 ),
                 buildRowOfButtons(),
-                Expanded(child: buildListViewOfNews(appCubit.newsApi))
+                Expanded(child: buildListViewOfNews(appCubit.newsApi,appCubit,))
               ],
             ),
           ),
