@@ -75,3 +75,7 @@ class InvalidNumber extends CubitState {}
 class CounterIncreased extends CubitState{}
 
 class articleremoved extends CubitState{}
+
+class tetxformfoucesState extends CubitState{}
+
+class SearchBarStateIsChanged extends CubitState{}

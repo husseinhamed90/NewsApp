@@ -54,6 +54,39 @@ Row buildLowerCategories(String text,String imageUrl) {
   );
 }
 
+Container buildCategoriesList(AppCubit appCubit, BuildContext context) {
+  return Container(
+    color: Colors.white,
+    alignment: Alignment.center,
+    height: 60,
+    padding: EdgeInsets.all(10),
+    child: ListView.separated(
+      itemBuilder: (context, index) {
+        return InkWell(
+            onTap: () {
+              appCubit.changeCurrentCategory(index);
+            },
+            child: Container(
+                padding: EdgeInsets.only(left: 10,right: 10),
+                decoration: BoxDecoration(
+                  color: (appCubit.selectedCategoryIndex!=index)?Colors.white:Color(0xff23b845),
+                  borderRadius: BorderRadius.all(Radius.circular(50)),
+                ),
+                alignment: Alignment.center,child: Text(AppCubit.get(context).categories[index],style: TextStyle(
+                color: (appCubit.selectedCategoryIndex!=index)?Colors.black:Colors.white,fontSize: 16
+            ),)));
+      },
+      separatorBuilder: (context, index) {
+        return SizedBox(
+          width: 22,
+        );
+      },
+      itemCount: AppCubit.get(context).categories.length,
+      scrollDirection: Axis.horizontal,
+    ),
+  );
+}
+
 
 ListView buildListViewOfNews(NewsApi newsApi,AppCubit appCubit) {
 
