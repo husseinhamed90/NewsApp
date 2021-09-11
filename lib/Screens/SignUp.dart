@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../Cubits/CategoriesCubit/CategoriesCubit.dart';
 import 'package:loginpagechallenge/Screens/NewsList.dart';
 import 'package:loginpagechallenge/Cubits/AppCubit/AppCubit.dart';
 import 'package:loginpagechallenge/Cubits/AppCubit/CubitStates.dart';
@@ -93,7 +94,7 @@ class _SignUpState extends State<SignUp> {
                         CustomTextFeild(label: "Confirm Password", width: MediaQuery.of(context).size.width-60, controller: confirmPassword,icon: Icon(Icons.lock_open_outlined,size: 20),),
                         SizedBox(height: 40,),
                         buildMainButton(context,"CREATE",(){
-                          appCubit.checkValidSignUpInputs(email.text, passWord.text, confirmPassword.text, userName.text, phone.text);
+                          appCubit.checkValidSignUpInputs(email.text, passWord.text, confirmPassword.text, userName.text, phone.text,CategoriesCubit.get(context));
                         }),
                         SizedBox(height: 40,),
                         Row(

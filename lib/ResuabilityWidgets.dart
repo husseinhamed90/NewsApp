@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'Cubits/CategoriesCubit/CategoriesCubit.dart';
 import 'package:loginpagechallenge/Cubits/AppCubit/AppCubit.dart';
 import 'package:loginpagechallenge/Models/NewsAPI.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -54,7 +55,7 @@ Row buildLowerCategories(String text,String imageUrl) {
   );
 }
 
-Container buildCategoriesList(AppCubit appCubit, BuildContext context) {
+Container buildCategoriesList(CategoriesCubit categoriesCubit,AppCubit appCubit) {
   return Container(
     color: Colors.white,
     alignment: Alignment.center,
@@ -64,16 +65,16 @@ Container buildCategoriesList(AppCubit appCubit, BuildContext context) {
       itemBuilder: (context, index) {
         return InkWell(
             onTap: () {
-              appCubit.changeCurrentCategory(index);
+              categoriesCubit.changeCurrentCategory(index,appCubit);
             },
             child: Container(
                 padding: EdgeInsets.only(left: 10,right: 10),
                 decoration: BoxDecoration(
-                  color: (appCubit.selectedCategoryIndex!=index)?Colors.white:Color(0xff23b845),
+                  color: (categoriesCubit.selectedCategoryIndex!=index)?Colors.white:Color(0xff23b845),
                   borderRadius: BorderRadius.all(Radius.circular(50)),
                 ),
-                alignment: Alignment.center,child: Text(AppCubit.get(context).categories[index],style: TextStyle(
-                color: (appCubit.selectedCategoryIndex!=index)?Colors.black:Colors.white,fontSize: 16
+                alignment: Alignment.center,child: Text(categoriesCubit.categories[index],style: TextStyle(
+                color: (categoriesCubit.selectedCategoryIndex!=index)?Colors.black:Colors.white,fontSize: 16
             ),)));
       },
       separatorBuilder: (context, index) {
@@ -81,7 +82,7 @@ Container buildCategoriesList(AppCubit appCubit, BuildContext context) {
           width: 22,
         );
       },
-      itemCount: AppCubit.get(context).categories.length,
+      itemCount: categoriesCubit.categories.length,
       scrollDirection: Axis.horizontal,
     ),
   );
@@ -138,8 +139,7 @@ InkWell buildNewItem(Article article,AppCubit appCubit,int index)  {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        height: 15,
-                       // width: double.infinity,
+                        height: 20,
                         child: buildContainerOfCategory(article.source!.name),
                       ),
                       Container(
@@ -175,7 +175,7 @@ InkWell buildNewItem(Article article,AppCubit appCubit,int index)  {
   );
 }
 
-Container buildRowOfButtons() {
+Container buildRowOfButtons(AppCubit appCubit,CategoriesCubit categoriesCubit) {
   return Container(
     padding: EdgeInsets.only(left: 20,right: 20,top: 15,bottom: 15),
     color: Color(0xfff3f2f2),
@@ -184,7 +184,8 @@ Container buildRowOfButtons() {
         buildTextButton(imageName: "images/bar.png",label: "Sort",),
         SizedBox(width: 15,),
         buildTextButton(imageName: "images/sliders.png",label: "Refine",onTap: (){
-          print("Refine");
+
+          appCubit.increasePageNumber(categoriesCubit);
         }),
         Spacer(),
         buildButtonsOnTheRight(),

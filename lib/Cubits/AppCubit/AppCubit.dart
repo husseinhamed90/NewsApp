@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc/bloc.dart';
+import '../CategoriesCubit/CategoriesCubit.dart';
 import 'package:loginpagechallenge/Cubits/AppCubit/CubitStates.dart';
 import 'package:loginpagechallenge/Models/NewsAPI.dart';
 import 'package:loginpagechallenge/Models/UserAccount.dart';
@@ -10,27 +11,15 @@ import 'package:loginpagechallenge/Network/Remote/FireBaseAPIs.dart';
 class AppCubit extends Cubit<CubitState>{
 
   AppCubit() : super(InitialState());
-
   UserAccount ?account;
-  List<String>categories =["business" ,"entertainment" ,"general", "health" ,"science" ,"sports" ,"technology"];
-  double numberOfPages=0;
-  int selectedCategoryIndex =0;
   NewsApi newsApi=new NewsApi();
+  double numberOfPages=0;
   int count =1;
-  bool focusState = false;
-  void textFormFocusState(bool b) {
-    focusState = b;
-    emit(tetxformfoucesState());
-  }
 
-
-  void reset(){
-    focusState=false;
-    emit(SearchBarStateIsChanged());
-  }
+  String searchedText ="";
   static AppCubit get(BuildContext context) => BlocProvider.of(context);
 
-  Future checkValidSignUpInputs(String username,String password,String confirmPassword,String name,String phoneNumber)async{
+  Future checkValidSignUpInputs(String username,String password,String confirmPassword,String name,String phoneNumber,CategoriesCubit categoriesCubit)async{
     emit(CheckForValidDataAndValidNumber());
     if(username==""||password ==""|| confirmPassword==""||phoneNumber==""||name==""){
       emit(EmptyFieldsFound());
@@ -38,7 +27,7 @@ class AppCubit extends Cubit<CubitState>{
     else{
       if(password ==confirmPassword){
         UserAccount userAccount =new UserAccount(username, password, name, phoneNumber);
-        await register(userAccount);
+        await register(userAccount,categoriesCubit);
       }
       else{
         emit(InvalidRegistration());
@@ -46,13 +35,13 @@ class AppCubit extends Cubit<CubitState>{
     }
   }
 
-  Future<void> register (UserAccount userAccount)async{
+  Future<void> register (UserAccount userAccount,CategoriesCubit categoriesCubit)async{
 
     emit(LoadingIndicator());
 
     account =await FirebaseAPIs.register(userAccount)??null;
     if(account!=null){
-      await loadData().then((value) {
+      await loadData(categoriesCubit).then((value) {
         emit(ValidUserState());
       });
     }
@@ -61,7 +50,7 @@ class AppCubit extends Cubit<CubitState>{
     }
   }
 
-  void login(String username,String password)async{
+  void login(String username,String password,CategoriesCubit categoriesCubit)async{
     if(username==""||password ==""){
       emit(EmptyFieldsFound());
     }
@@ -70,7 +59,7 @@ class AppCubit extends Cubit<CubitState>{
 
       account  =await FirebaseAPIs.login(username, password)??null;
       if(account!=null){
-        await loadData().then((value) async {
+        await loadData(categoriesCubit).then((value) async {
           emit(ValidUserState());
         });
       }
@@ -80,44 +69,48 @@ class AppCubit extends Cubit<CubitState>{
     }
   }
 
-
-  void removeNewFromList(int index){
-    newsApi.articles!.removeAt(index);
-    emit(articleremoved());
+  void setSearchedText(String text){
+    searchedText=text;
+    emit(SearchedTextState());
   }
 
-  Future loadData()async{
+  Future loadData(CategoriesCubit categoriesCubit)async{
     emit(LoadingIndicator());
-    newsApi =await DioHelper.getNews(count,categories[selectedCategoryIndex]);
+
+    if(searchedText==""){
+      newsApi =await DioHelper.getNews(count,categoriesCubit.categories[categoriesCubit.selectedCategoryIndex]);
+    }
+    else{
+      newsApi =await DioHelper.getNewsWithSearchedText(count,searchedText);
+
+    }
     emit(DataIsInLoadingPhase());
     numberOfPages = (newsApi.totalResults!/20);
   }
 
-  Future getNewsWithSearchedText(String searchedText)async{
+  Future getNewsWithSearchedText(String searchedText,CategoriesCubit categoriesCubit)async{
     emit(LoadingIndicator());
-    selectedCategoryIndex=-1;
-    newsApi =await DioHelper.getNewsWithSearchedText(count,searchedText);
-    emit(DataIsInLoadingPhase());
-    numberOfPages = (newsApi.totalResults!/20);
-  }
-
-  Future<void> changeCurrentCategory(int index)async{
-    selectedCategoryIndex=index;
+    categoriesCubit.resetSelectedIndex();
     count=1;
-    emit(PositionChanged());
-    loadData();
+    newsApi =await DioHelper.getNewsWithSearchedText(count,searchedText);
+    numberOfPages = (newsApi.totalResults!/20);
+    emit(DataIsInLoadingPhase());
   }
 
-  void increasePageNumber(){
+  void resetNumberOfPagesCount(){
+    count=1;
+    setSearchedText("");
+    emit(ResetNumberOfPagesCountState());
+  }
+
+  void increasePageNumber(CategoriesCubit categoriesCubit){
     if(count<=numberOfPages){
       count++;
-      loadData();
+      loadData(categoriesCubit);
     }
     else{
       count=1;
-      loadData();
-
+      loadData(categoriesCubit);
     }
   }
-
 }

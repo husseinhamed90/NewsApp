@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../Cubits/CategoriesCubit/CategoriesCubit.dart';
 import 'package:loginpagechallenge/Cubits/AppCubit/AppCubit.dart';
 import 'package:loginpagechallenge/Cubits/AppCubit/CubitStates.dart';
 import 'package:loginpagechallenge/CustomTextFeild.dart';
@@ -84,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                     buildSmallText(context,"Forgot Password?",Alignment.topRight,30,Color(0xff343e4a)),
                     SizedBox(height: 25,),
                     buildMainButton(context,"LOG IN",(){
-                      appCubit.login(userName.text, passWord.text);
+                      appCubit.login(userName.text, passWord.text,CategoriesCubit.get(context));
                     }),
                     SizedBox(height: 35,),
                     Text("Or connect using",style: TextStyle(

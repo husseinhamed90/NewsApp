@@ -4,7 +4,7 @@ import 'package:loginpagechallenge/Network/Remote/EndPoints.dart';
 
 class DioHelper{
   static late Dio dio ;
-  static String apiKey="25bf51ed51cb457a894f72f5aa390ac3";
+  static String apiKey="1351289578704b3d93f06ed24409fbfb";
   static String baseUrl ="https://newsapi.org/v2/";
 
   static init(){
@@ -15,6 +15,8 @@ class DioHelper{
 
     NewsApi newsApi=new NewsApi();
 
+    print(numberOfPage);
+    print(category);
     await dio.get('$baseUrl$topHeadlines',queryParameters: {"country":"eg","category":"$category","apiKey":"$apiKey","page":numberOfPage}).then((response) {
       newsApi=NewsApi.fromJson(response.data);
     }).onError((error, stackTrace) {
@@ -35,8 +37,6 @@ class DioHelper{
     removeSpeceificSourceNews(newsApi);
     return newsApi;
   }
-
-
   static void removeSpeceificSourceNews(NewsApi newsApi) {
      for(int i=0;i<newsApi.articles!.length;i++){
       if(newsApi.articles![i].source!.name=="Aljazeera.net"){
