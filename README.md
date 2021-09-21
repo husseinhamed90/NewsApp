@@ -1,16 +1,7 @@
-# loginpagechallenge
+# News App
 
 A new Flutter application.
 
-## Getting Started
+## Test News App
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+https://user-images.githubusercontent.com/81229455/134197345-a3c763a7-a7ed-480f-a73f-929e7f742d37.mp4
